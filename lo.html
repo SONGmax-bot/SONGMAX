@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG مجانا | هدايا و شدات</title>
+    <!-- Google Fonts - خط عربي عصري -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (مجاني) للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #0b0f15;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            color: #fff;
+        }
+
+        /* خلفية متحركة من الإنترنت - صورة من Pexels (ألعاب) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(0.3) blur(3px);
+            z-index: -2;
+        }
+
+        /* طبقة داكنة شفافة لتحسين القراءة */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: rgba(20, 30, 40, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 50px;
+            padding: 40px 30px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6), 0 0 0 2px #ffcc00 inset, 0 0 20px #ffaa00;
+            text-align: center;
+        }
+
+        /* شعار ببجي من الإنترنت (صورة خارجية) */
+        .pubg-logo {
+            width: 180px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px #ffaa00);
+            transition: transform 0.3s;
+        }
+        .pubg-logo:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(145deg, #ffe68f, #ffb347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px #ff9900;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #ddd;
+            margin-bottom: 35px;
+            border-bottom: 1px dashed #ffcc00;
+            padding-bottom: 15px;
+        }
+
+        .subtitle i {
+            color: #ffcc00;
+            margin: 0 5px;
+        }
+
+        .buttons-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        /* تصميم الأزرار الفاخرة */
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #1f2a36, #0f1a24);
+            border: 2px solid #ffcc00;
+            border-radius: 70px;
+            padding: 12px 25px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            box-shadow: 0 8px 0 #9e7500, 0 10px 25px rgba(0,0,0,0.6);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 13px 0 #9e7500, 0 15px 30px rgba(0,0,0,0.7);
+            background: linear-gradient(135deg, #2a3848, #1a2735);
+            border-color: #ffdd55;
+        }
+
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #9e7500;
+        }
+
+        /* أيقونة الزر من Font Awesome */
+        .btn i {
+            font-size: 2.2rem;
+            color: #ffcc00;
+            text-shadow: 0 0 10px #ffaa00;
+            width: 50px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .btn:hover i {
+            transform: scale(1.2) rotate(5deg);
+            color: #ffe77a;
+        }
+
+        /* الجزء الأيمن (السهم) */
+        .btn span {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .arrow-icon {
+            font-size: 1.8rem;
+            opacity: 0.7;
+            transition: 0.2s;
+        }
+
+        .btn:hover .arrow-icon {
+            opacity: 1;
+            transform: translateX(-5px); /* لأن الاتجاه من اليمين لليسار، السهم يشير لليسار */
+        }
+
+        /* قسم الصور المضافة من الإنترنت (بطاقات) */
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .gallery img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 2px solid #ffcc00;
+            box-shadow: 0 0 15px #ffaa00;
+            transition: 0.2s;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.1);
+            border-color: white;
+        }
+
+        .footer-note {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            background: rgba(0,0,0,0.6);
+            padding: 12px;
+            border-radius: 40px;
+            border: 1px solid #ffcc00;
+        }
+
+        .footer-note i {
+            color: #ffcc00;
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 500px) {
+            .container { padding: 30px 15px; }
+            .btn { font-size: 1.2rem; padding: 10px 15px; }
+            .btn i { font-size: 1.8rem; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- شعار ببجي من الإنترنت (رابط مباشر لشعار اللعبة) -->
+        <img class="pubg-logo" src="https://i.pinimg.com/originals/3b/7d/ea/3b7dea2fcb2fae164aed9750d1544a0d.png" 
+             alt="PUBG Logo" 
+             onerror="this.onerror=null; this.src='https://cdn.freebiesupply.com/logos/large/2x/pubg-2-logo-png-transparent.png';">
+
+        <h1>🎁 هدايا الشدات المجانية</h1>
+        <div class="subtitle">
+            <i class="fas fa-shield-alt"></i> اضغط على أي زر للحصول على جائزتك <i class="fas fa-shield-alt"></i>
+        </div>
+
+        <!-- الأزرار المطلوبة - كلها تحول إلى ببجي.html -->
+        <div class="buttons-grid">
+            <a href="ببجي.html" class="btn">
+                <i class="fas fa-crown"></i>
+                <span>عرض الأول 500 شدت مجانا <i class="fas fa-arrow-left arrow-icon"></i></span>
+            </a>
+            <a href="ببجي.html" class="btn">
+                <i class="fas fa-coins"></i>
+                <span>250 شدت مجانا <i class="fas fa-arrow-left arrow-icon"></i></span>
+            </a>
+            <a href="ببجي.html" class="btn">
+                <i class="fas fa-person-walking"></i>
+                <span>رقص الفرعون <i class="fas fa-arrow-left arrow-icon"></i></span>
+            </a>
+            <a href="ببجي.html" class="btn">
+                <i class="fas fa-tshirt"></i>
+                <span>ملابس الفرعون <i class="fas fa-arrow-left arrow-icon"></i></span>
+            </a>
+            <a href="ببجي.html" class="btn">
+                <i class="fas fa-gun"></i>
+                <span>أم فور تلجي <i class="fas fa-arrow-left arrow-icon"></i></span>
+            </a>
+        </div>
+
+        <!-- صور من الإنترنت لإضفاء جو اللعبة -->
+        <div class="gallery">
+            <img src="https://images.pexels.com/photos/4531269/pexels-photo-4531269.jpeg?auto=compress&cs=tinysrgb&w=600" alt="PUBG weapon">
+            <img src="https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?auto=compress&cs=tinysrgb&w=600" alt="PUBG helmet">
+            <img src="https://images.pexels.com/photos/4429276/pexels-photo-4429276.jpeg?auto=compress&cs=tinysrgb&w=600" alt="PUBG vehicle">
+            <img src="https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Gaming setup">
+        </div>
+
+       
+</body>
+</html>
