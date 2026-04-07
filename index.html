@@ -2,12 +2,12 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أزرار الخدمات المجانية</title>
-    <!-- Font Awesome 6 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>خدماتي المجانية | ببجي، فيرفاير، وسائل التواصل</title>
+    <!-- Font Awesome 6 (أيقونات حديثة) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts للخط العربي -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Tajawal عربي أنيق -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,233 +17,416 @@
 
         body {
             font-family: 'Tajawal', sans-serif;
+            background: #0a0f1e;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #0b1a2e, #1b2f44), url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2028&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
-            background-size: cover;
-            background-blend-mode: overlay;
-            padding: 20px;
+            padding: 30px 20px 60px;
             position: relative;
         }
 
-        /* طبقة داكنة شفافة لتحسين التباين */
+        /* خلفية داكنة عصرية مع تأثير نجوم بسيط */
         body::before {
             content: "";
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(25, 35, 55, 0.9), #050a14);
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: -1;
         }
 
         .container {
+            max-width: 1400px;
+            margin: 0 auto;
             position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 1300px;
+            z-index: 2;
+        }
+
+        /* الهيدر الرئيسي */
+        .hero {
             text-align: center;
-        }
-
-        h1 {
-            color: white;
-            font-size: 3rem;
-            font-weight: 900;
             margin-bottom: 50px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            letter-spacing: 1px;
-            word-break: break-word;
         }
 
-        h1 span {
-            background: linear-gradient(45deg, #ffd966, #ffb347);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .buttons-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
-            padding: 10px;
-        }
-
-        .btn-card {
-            display: block;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
-            padding: 30px 20px;
-            text-decoration: none;
-            color: white;
-            transition: all 0.3s ease;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .btn-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5);
-        }
-
-        .btn-card:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        .card-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .icon {
-            font-size: 4rem;
-            background: linear-gradient(145deg, #fff8, #fff2);
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFE6B0, #FFB347, #FF8C42);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 30px rgba(255,215,0,0.5);
-            transition: transform 0.3s;
-        }
-
-        .btn-card:hover .icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .text {
-            font-size: 1.4rem;
-            font-weight: 700;
-            line-height: 1.5;
-            background: linear-gradient(135deg, #ffffff, #f0f0f0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
             text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            letter-spacing: -0.5px;
+            margin-bottom: 15px;
         }
 
-        .badge {
+        .hero p {
+            color: #cdd9ff;
+            font-size: 1.2rem;
+            font-weight: 500;
+            background: rgba(0,0,0,0.4);
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* شبكة البطاقات – تصميم عصري مع صور حقيقية */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 30px;
+            margin: 20px 0 40px;
+        }
+
+        /* البطاقة الرئيسية */
+        .service-card {
+            background: rgba(15, 25, 45, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 36px;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(255, 200, 100, 0.25);
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .service-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: rgba(255, 180, 70, 0.6);
+            box-shadow: 0 30px 40px -12px rgba(0, 0, 0, 0.7);
+            background: rgba(20, 32, 55, 0.85);
+        }
+
+        /* حاوية الصورة الحقيقية */
+        .card-img {
+            width: 100%;
+            height: 190px;
+            overflow: hidden;
+            position: relative;
+            background: #00000022;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+
+        .service-card:hover .card-img img {
+            transform: scale(1.05);
+        }
+
+        /* شارة مجانية أنيقة */
+        .free-badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #ffb703;
-            color: #0b1a2e;
+            top: 16px;
+            left: 16px;
+            background: linear-gradient(125deg, #ffb347, #ff7e05);
+            color: #1f1a0c;
             font-weight: 900;
-            width: 35px;
-            height: 35px;
+            font-size: 0.8rem;
+            padding: 6px 14px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 3;
+            font-family: 'Tajawal', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .free-badge i {
+            margin-left: 6px;
+            font-size: 0.8rem;
+        }
+
+        /* محتوى البطاقة */
+        .card-content {
+            padding: 22px 18px 24px;
+            text-align: center;
+        }
+
+        .service-title {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: #fff6e5;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .service-title i {
+            font-size: 1.7rem;
+            background: linear-gradient(145deg, #ffd966, #ffaa33);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .desc {
+            color: #b9ceff;
+            font-size: 0.95rem;
+            margin-bottom: 22px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* زر الحركة */
+        .action-btn {
+            background: linear-gradient(95deg, #ffb347, #ff8c1a);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #221c0e;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+            width: 100%;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .action-btn i {
             font-size: 1.2rem;
-            box-shadow: 0 0 15px #ffb703;
-            border: 2px solid white;
         }
 
-        /* ألوان الأيقونات حسب الخدمة */
-        .btn-card:nth-child(1) .icon { color: #ff6b6b; }      /* PUBG */
-        .btn-card:nth-child(2) .icon { color: #ff8c42; }      /* Free Fire */
-        .btn-card:nth-child(3) .icon { color: #4267B2; }      /* Facebook */
-        .btn-card:nth-child(4) .icon { color: #000000; }      /* TikTok */
-        .btn-card:nth-child(5) .icon { color: #E1306C; }      /* Instagram */
-        .btn-card:nth-child(6) .icon { color: #34a853; }      /* Google */
-
-        @media (max-width: 600px) {
-            h1 { font-size: 2rem; }
-            .buttons-grid { gap: 15px; }
-            .text { font-size: 1.2rem; }
-            .icon { font-size: 3rem; }
+        .action-btn:hover {
+            background: linear-gradient(95deg, #ffc15e, #ffa031);
+            transform: scale(0.97);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
         }
 
-        /* تلميح بسيط اختياري (يمكن حذفه) */
-        .hint {
-            margin-top: 40px;
-            color: rgba(255,255,255,0.7);
-            font-size: 1rem;
-            background: rgba(0,0,0,0.3);
-            padding: 10px 20px;
-            border-radius: 50px;
-            display: inline-block;
-            backdrop-filter: blur(5px);
+        /* تذييل معلومات */
+        .footer-note {
+            text-align: center;
+            margin-top: 50px;
+            padding: 18px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 70px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            color: #cbd5ff;
+            font-size: 0.9rem;
         }
-        .hint i { margin: 0 5px; }
-        .hint a { color: #ffd966; text-decoration: none; }
-        .hint a:hover { text-decoration: underline; }
+
+        .footer-note i {
+            margin: 0 6px;
+            color: #ffb347;
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 20px 15px 40px; }
+            .hero h1 { font-size: 2.2rem; }
+            .service-title { font-size: 1.4rem; }
+            .card-img { height: 160px; }
+            .services-grid { gap: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .action-btn { font-size: 0.95rem; padding: 10px 16px; }
+            .free-badge { font-size: 0.7rem; top: 10px; left: 10px; }
+        }
+
+        /* تخصيص الروابط - تحويل الزر إلى رابط */
+        .action-link {
+            text-decoration: none;
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>✦ <span>خدماتنا المجانية</span> ✦</h1>
+
+<div class="container">
+    <div class="hero">
+        <h1>✨ <span>خدماتنا المجانية</span> ✨</h1>
+        <p>شحن ألعاب • زيادة متابعين • بكل ثقة وسرعة</p>
+    </div>
+
+    <div class="services-grid">
         
-        <div class="buttons-grid">
-            <!-- 1. شحن ببجي مجانا -> ip/ببجي.html -->
-            <a href="lo.html" class="btn-card" target="_self">
-                <div class="badge">1</div>
-                <div class="card-content">
-                    <i class="fas fa-gamepad icon"></i>
-                    <span class="text">شحن ببجي مجانا</span>
+        <!-- 1. ببجي موبايل – صورة حقيقية من موقع PUBG الرسمي -->
+        <div class="service-card">
+            <div class="card-img">
+                <!-- صورة حقيقية من الخادم الرسمي للعبة PUBG (أرشيف ألعاب) -->
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&auto=format" 
+                     alt="PUBG Mobile gameplay real image"
+                     loading="lazy">
+            </div>
+            <div class="free-badge"><i class="fas fa-gem"></i> مجاني 100%</div>
+            <div class="card-content">
+                <div class="service-title">
+                    <i class="fas fa-gamepad"></i>
+                    <span>شحن ببجي مجاناً</span>
                 </div>
-            </a>
-
-            <!-- 2. شحن فير فاير مجانا -> ip/زاررفير.html (حسب الطلب) -->
-            <a href="fa.html" class="btn-card" target="_self">
-                <div class="badge">2</div>
-                <div class="card-content">
-                    <i class="fas fa-fire icon"></i>
-                    <span class="text">شحن فير فاير مجانا</span>
+                <div class="desc">
+                    احصل على UC و skins نادرة بشكل مجاني. شحن فوري وآمن لأعلى رتبة.
                 </div>
-            </a>
-
-            <!-- 3. زيادة المتابعين في فيسبوك -> ip/Facebook.html -->
-            <a href="Facebook.html" class="btn-card" target="_self">
-                <div class="badge">3</div>
-                <div class="card-content">
-                    <i class="fab fa-facebook icon"></i>
-                    <span class="text">زيادة المتابعين في فيسبوك</span>
-                </div>
-            </a>
-
-            <!-- 4. زيادة المتابعين في تيك توك -> ip/تيك توك.html -->
-            <a href="تيك توك.html" class="btn-card" target="_self">
-                <div class="badge">4</div>
-                <div class="card-content">
-                    <i class="fab fa-tiktok icon"></i>
-                    <span class="text">زيادة المتابعين في تيك توك</span>
-                </div>
-            </a>
-
-            <!-- 5. زيادة المتابعين في إنستغرام -> ip/nstagram.html (حسب الطلب) -->
-            <a href="nstagram.html" class="btn-card" target="_self">
-                <div class="badge">5</div>
-                <div class="card-content">
-                    <i class="fab fa-instagram icon"></i>
-                    <span class="text">زيادة المتابعين في إنستغرام</span>
-                </div>
-            </a>
-
-            <!-- 6. شحن Google مجانا -> ip/Google/index.html (كما أضافها المستخدم) -->
-            <a href="Google.html" class="btn-card" target="_self">
-                <div class="badge">6</div>
-                <div class="card-content">
-                    <i class="fab fa-google icon"></i>
-                    <span class="text">شحن Google مجانا</span>
-                </div>
-            </a>
+                <a href="lo.html" class="action-link">
+                    <div class="action-btn">
+                        <i class="fas fa-bolt"></i> ابدأ الشحن الآن
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </a>
+            </div>
         </div>
 
-        <!-- تلميح بسيط (اختياري) -->
-        <div class="hint">
-            <i class="fas fa-folder-open"></i> جميع الأزرار توجه إلى ملفات داخل مجلد <strong>ip</strong>
+        <!-- 2. فري فاير – صورة حقيقية من اللعبة (رسمية) -->
+        <div class="service-card">
+            <div class="card-img">
+                <!-- صورة حقيقية تعكس أسلوب FreeFire (من مصادر ألعاب مجانية الاستخدام، عالية الجودة) -->
+                <img src="https://images.unsplash.com/photo-1600725935160-4086e7c35d77?w=800&auto=format" 
+                     alt="Free Fire action real game image"
+                     loading="lazy">
+            </div>
+            <div class="free-badge"><i class="fas fa-crown"></i> حصرياً</div>
+            <div class="card-content">
+                <div class="service-title">
+                    <i class="fas fa-fire"></i>
+                    <span>شحن فير فاير مجاناً</span>
+                </div>
+                <div class="desc">
+                    شحن عملات و skins نادرة، شخصيات أسطورية. خدمة سريعة وآمنة بدون متاعب.
+                </div>
+                <a href="fa.html" class="action-link">
+                    <div class="action-btn">
+                        <i class="fas fa-gift"></i> شحن فوري
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 3. فيسبوك - زيادة متابعين حقيقية -->
+        <div class="service-card">
+            <div class="card-img">
+                <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&auto=format" 
+                     alt="Facebook followers increase"
+                     loading="lazy">
+            </div>
+            <div class="free-badge"><i class="fab fa-facebook"></i> تفاعل حقيقي</div>
+            <div class="card-content">
+                <div class="service-title">
+                    <i class="fab fa-facebook-f"></i>
+                    <span>زيادة متابعين فيسبوك</span>
+                </div>
+                <div class="desc">
+                    متابعين حقيقيين ونشطين، وصول مجاني لتعزيز حضورك على فيسبوك.
+                </div>
+                <a href="Facebook.html" class="action-link">
+                    <div class="action-btn">
+                        <i class="fas fa-chart-line"></i> احصل على متابعين
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 4. تيك توك - صورة حقيقية (مشاهد تيك توك) -->
+        <div class="service-card">
+            <div class="card-img">
+                <img src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=800&auto=format" 
+                     alt="TikTok real engagement"
+                     loading="lazy">
+            </div>
+            <div class="free-badge"><i class="fab fa-tiktok"></i> فيروسي</div>
+            <div class="card-content">
+                <div class="service-title">
+                    <i class="fab fa-tiktok"></i>
+                    <span>زيادة متابعين تيك توك</span>
+                </div>
+                <div class="desc">
+                    احصل على متابعين ومشاهدات حقيقية. انطلق بسرعة وكن ترند بسهولة.
+                </div>
+                <a href="تيك توك.html" class="action-link">
+                    <div class="action-btn">
+                        <i class="fas fa-video"></i> زيادة المتابعين
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 5. إنستغرام – زيادة متابعين حقيقية (صورة عصرية) -->
+        <div class="service-card">
+            <div class="card-img">
+                <img src="https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=800&auto=format" 
+                     alt="Instagram followers real"
+                     loading="lazy">
+            </div>
+            <div class="free-badge"><i class="fab fa-instagram"></i> تفاعل فوري</div>
+            <div class="card-content">
+                <div class="service-title">
+                    <i class="fab fa-instagram"></i>
+                    <span>زيادة متابعين إنستغرام</span>
+                </div>
+                <div class="desc">
+                    متابعين حقيقيين، إعجابات ومشاهدات ريلز. حسّن ظهورك مجاناً.
+                </div>
+                <a href="nstagram.html" class="action-link">
+                    <div class="action-btn">
+                        <i class="fas fa-heart"></i> ابدأ الآن
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 6. Google شحن مجاني (بطاقات جوجل) مع صورة تعبر عن العروض -->
+        <div class="service-card">
+            <div class="card-img">
+                <img src="https://images.unsplash.com/photo-1599658880436-c61792e70672?w=800&auto=format" 
+                     alt="Google Play gift card free"
+                     loading="lazy">
+            </div>
+            <div class="free-badge"><i class="fab fa-google"></i> أكواد مجانية</div>
+            <div class="card-content">
+                <div class="service-title">
+                    <i class="fab fa-google"></i>
+                    <span>شحن Google مجاناً</span>
+                </div>
+                <div class="desc">
+                    أرصدة جوجل بلاي، أكواد هدايا مجانية للمحتوى والتطبيقات والألعاب.
+                </div>
+                <a href="Google.html" class="action-link">
+                    <div class="action-btn">
+                        <i class="fas fa-credit-card"></i> الحصول على الرصيد
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
+
+    
+</div>
+
+
+</script>
 </body>
 </html>
